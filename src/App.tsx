@@ -13,6 +13,7 @@ export function App() {
   const { data: paginatedTransactions, ...paginatedTransactionsUtils } = usePaginatedTransactions()
   const { data: transactionsByEmployee, ...transactionsByEmployeeUtils } = useTransactionsByEmployee()
   const [isLoading, setIsLoading] = useState(false)
+  const [showViewMoreButton, setShowViewMoreButton] = useState(true)
 
   const transactions = useMemo(
     () => paginatedTransactions?.data ?? transactionsByEmployee ?? null,
@@ -66,11 +67,13 @@ export function App() {
             }
 
             if(newValue === EMPTY_EMPLOYEE) {
-              await loadAllTransactions();
+              await loadAllTransactions()
+              setShowViewMoreButton(true)
               return; 
             }
 
             await loadTransactionsByEmployee(newValue.id)
+            setShowViewMoreButton(false)
           }}
         />
 
@@ -80,7 +83,7 @@ export function App() {
           <Transactions transactions={transactions} />
 
           {transactions !== null && (
-            <button
+            showViewMoreButton ? <button
               className="RampButton"
               disabled={paginatedTransactionsUtils.loading}
               onClick={async () => {
@@ -88,7 +91,7 @@ export function App() {
               }}
             >
               View More
-            </button>
+            </button> : null
           )}
         </div>
       </main>
