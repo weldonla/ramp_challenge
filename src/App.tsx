@@ -20,6 +20,11 @@ export function App() {
     [paginatedTransactions, transactionsByEmployee]
   )
 
+  const hasNextPage = useMemo(
+    () => paginatedTransactions?.nextPage ? true : false, 
+    [paginatedTransactions]
+  )
+
   const loadAllTransactions = useCallback(async () => {
     setIsLoading(true)
     transactionsByEmployeeUtils.invalidateData()
@@ -83,7 +88,7 @@ export function App() {
           <Transactions transactions={transactions} />
 
           {transactions !== null && (
-            showViewMoreButton ? <button
+            (showViewMoreButton && hasNextPage) ? <button
               className="RampButton"
               disabled={paginatedTransactionsUtils.loading}
               onClick={async () => {
