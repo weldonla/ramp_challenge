@@ -124,3 +124,10 @@ export type RegisteredEndpoints =
   | "paginatedTransactions"
   | "transactionsByEmployee"
   | "setTransactionApproval"
+
+export enum REGISTERED_ENDPOINTS {
+  EMPLOYEES = "employees",
+  PAGINATED_TRANSACTIONS = "paginatedTransactions",
+  TRANSACTIONS_BY_EMPLOYEE = "transactionsByEmployee",
+  SET_TRANSACTION_APPROVAL = "setTransactionApproval",
+}

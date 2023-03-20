@@ -3,18 +3,21 @@ import { useCustomFetch } from "src/hooks/useCustomFetch"
 import { SetTransactionApprovalParams } from "src/utils/types"
 import { TransactionPane } from "./TransactionPane"
 import { SetTransactionApprovalFunction, TransactionsComponent } from "./types"
+import { REGISTERED_ENDPOINTS, RegisteredEndpoints } from "src/utils/fetch"
 
 export const Transactions: TransactionsComponent = ({ transactions }) => {
-  const { fetchWithCache, loading } = useCustomFetch()
+  const { fetchWithoutCache, clearCacheByEndpoint, loading } = useCustomFetch()
 
   const setTransactionApproval = useCallback<SetTransactionApprovalFunction>(
     async ({ transactionId, newValue }) => {
-      await fetchWithCache<void, SetTransactionApprovalParams>("setTransactionApproval", {
+      await fetchWithoutCache<void, SetTransactionApprovalParams>("setTransactionApproval", {
         transactionId,
         value: newValue,
       })
+      
+      clearCacheByEndpoint([REGISTERED_ENDPOINTS.PAGINATED_TRANSACTIONS, REGISTERED_ENDPOINTS.TRANSACTIONS_BY_EMPLOYEE])
     },
-    [fetchWithCache]
+    [fetchWithoutCache]
   )
 
   if (transactions === null) {
